@@ -1,20 +1,21 @@
 'use strict';
 
-const os = require('os');
-const nodeStatic = require('node-static');
-const http = require('http');
-const socketIO = require('socket.io');
+var express = require('express');
+var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+var port = process.env.PORT || 8080;
 
-const fileServer = new(nodeStatic.Server)();
-const app = http.createServer(function(req, res) {
-  fileServer.serve(req, res);
-}).listen(8080, function () {
-  console.log('listening on *:8080');
+app.use(express.static(__dirname + '/'));
+
+server.listen(port, function (err) {
+  if (err) {
+    throw err;
+  }
+  console.log(`server is listening on ${port}...`);
 });
 
-const io = socketIO.listen(app);
-io.sockets.on('connection', function(socket) {
-
+io.sockets.on('connection', function (socket) {
   // convenience function to log server messages on the client
   function log() {
     const array = ['Message from server:'];
@@ -28,3 +29,5 @@ io.sockets.on('connection', function(socket) {
     socket.broadcast.emit('message', message);
   });
 });
+
+module.exports = app;
