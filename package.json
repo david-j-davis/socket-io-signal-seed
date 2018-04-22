@@ -1,5 +1,5 @@
 {
-  "name": "SocketIO client signaling example",
+  "name": "SocketIO-client-signaling-example",
   "version": "0.0.1",
   "description": "SocketIO client signaling example",
   "scripts": {
